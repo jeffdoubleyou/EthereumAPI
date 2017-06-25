@@ -2,7 +2,7 @@ package EthereumAPI
 
 import (
 	"fmt"
-    "strconv"
+    "math/big"
 )
 
 //https://github.com/ethereum/wiki/wiki/JSON-RPC
@@ -111,17 +111,16 @@ func EthBlockNumber() (int64, error) {
 }
 
 //TODO: test
-func EthGetBalance(address string, blockNumberOrTag string) (int64, error) {
+func EthGetBalance(address string, blockNumberOrTag string) (*big.Int, error) {
 	resp, err := Call("eth_getBalance", []string{address, blockNumberOrTag})
 	if err != nil {
-		return 0, err
+		return big.NewInt(0), err
 	}
 	if resp.Error != nil {
-		return 0, fmt.Errorf(resp.Error.Message)
+		return big.NewInt(0), fmt.Errorf(resp.Error.Message)
 	}
-    i, _ := strconv.ParseInt(resp.Result.(string), 0, 64)
-    return i, err
-    //return ParseQuantity(resp.Result.(string))
+    return ParseQuantityBig(resp.Result.(string))
+    
 }
 
 //TODO: test

@@ -8,7 +8,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"strconv"
+    "math/big"
+    "strconv"
 )
 
 func MapToObject(source interface{}, dst interface{}) error {
@@ -17,6 +18,17 @@ func MapToObject(source interface{}, dst interface{}) error {
 		return err
 	}
 	return json.Unmarshal(b, dst)
+}
+
+func ParseQuantityBig(q string) (*big.Int, error) {
+    bi := big.NewInt(0)
+    _, ok := bi.SetString(q, 0)
+
+    if(ok) {
+        return bi, nil
+    } else {
+        return bi, fmt.Errorf("Unable to parse balance %s", q)
+    }
 }
 
 func ParseQuantity(q string) (int64, error) {
