@@ -2,6 +2,7 @@ package EthereumAPI
 
 import (
 	"fmt"
+    "strconv"
 )
 
 //https://github.com/ethereum/wiki/wiki/JSON-RPC
@@ -118,7 +119,9 @@ func EthGetBalance(address string, blockNumberOrTag string) (int64, error) {
 	if resp.Error != nil {
 		return 0, fmt.Errorf(resp.Error.Message)
 	}
-	return ParseQuantity(resp.Result.(string))
+    i, _ := strconv.ParseInt(resp.Result.(string), 0, 64)
+    return i, err
+    //return ParseQuantity(resp.Result.(string))
 }
 
 //TODO: test
